@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despedida de Soltero - Diego Sanchez</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .card-container {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-category {
+            font-size: 14px;
+            font-weight: bold;
+            color: #8e44ad;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card-text {
+            font-size: 18px;
+            line-height: 1.4;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .counter {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #8e44ad;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(252, 182, 159, 0.3);
+        }
+
+        .rules-toggle {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        .rules {
+            display: none;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .rules h4 {
+            color: #8e44ad;
+            margin-bottom: 10px;
+        }
+
+        .rules ul {
+            margin-left: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .card-text {
+                font-size: 16px;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">🎉 Despedida de Soltero</div>
+            <div class="subtitle">Diego Sanchez</div>
+        </div>
+
+        <div class="counter">
+            Carta <span id="cardNumber">1</span> de <span id="totalCards">50</span>
+        </div>
+
+        <div class="card-container">
+            <div class="card-content">
+                <div class="card-category" id="cardCategory">Yo nunca he...</div>
+                <div class="card-text" id="cardText">Cargando carta...</div>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="nextCard()">
+                Siguiente Carta
+            </button>
+            <button class="btn btn-secondary" onclick="shuffleCards()">
+                Mezclar Todas
+            </button>
+        </div>
+
+        <div class="rules-toggle" onclick="toggleRules()">
+            Ver reglas del juego
+        </div>
+
+        <div class="rules" id="rules">
+            <h4>Reglas Adicionales:</h4>
+            <ul>
+                <li>Si alguien menciona "El Señor de los Anillos" sin que sea parte de la pregunta, toma</li>
+                <li>Si Diego Sanchez se pone grumpy durante el juego, todos los demás toman</li>
+                <li>Si alguien sugiere ir a Las Estacas, esa persona asigna tragos</li>
+                <li>El que hable de FIFA fuera de las preguntas, toma doble</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const cards = [
+            {category: "Yo nunca he...", text: "Yo nunca he apostado sobre el matrimonio de Diego Sanchez", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he estudiado pedagogía", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he sido llamado \"el tío\" por parecer más viejo", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he perdido en FIFA y culpado al control", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he sido el más testarudo del grupo", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he conocido a la novia de Sanchez antes que él", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he ido a Las Estacas más de 5 veces", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he hecho una referencia de El Señor de los Anillos en una conversación seria", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he llegado tarde a una reunión del grupo", rule: "El que lo haya hecho, toma"},
+            {category: "Yo nunca he...", text: "Yo nunca he pensado que Sanchez se casaría primero", rule: "El que lo haya hecho, toma"},
+            
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que critique la música en la boda de Sanchez?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que llore en la ceremonia?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que se pierda camino a la iglesia?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que haga un discurso muy largo en la boda?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que insista en cambiar la playlist de la boda?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que se case después de Sanchez?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que organice el siguiente viaje a Las Estacas?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que siga soltero por más tiempo?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que se quede dormido durante la ceremonia?", rule: "El grupo vota, el elegido toma"},
+            {category: "¿Quién es más probable?", text: "¿Quién es más probable que photobombe las fotos de la boda?", rule: "El grupo vota, el elegido toma"},
+            
+            {category: "Desafío para el Novio", text: "Menciona 3 cualidades de tu novia que no sean físicas (tienes 10 segundos)", rule: "Si Diego no lo hace bien, todos toman"},
+            {category: "Desafío para el Novio", text: "Imita cómo te pusiste cuando te aceptó la propuesta de matrimonio", rule: "Si Diego no lo hace bien, todos toman"},
+            {category: "Desafío para el Novio", text: "Di los nombres completos de todos tus padrinos de boda", rule: "Si Diego no lo hace bien, todos toman"},
+            {category: "Desafío para el Novio", text: "Recita un verso de amor (puede ser inventado)", rule: "Si Diego no lo hace bien, todos toman"},
+            {category: "Desafío para el Novio", text: "Demuestra cómo vas a bailar el vals en tu boda", rule: "Si Diego no lo hace bien, todos toman"},
+            {category: "Desafío para el Novio", text: "Di cuándo es el aniversario de tu primera cita", rule: "Si Diego no lo hace bien, todos toman"},
+            {category: "Desafío para el Novio", text: "Menciona el nombre de la mascota que quiere tu novia", rule: "Si Diego no lo hace bien, todos toman"},
+            {category: "Desafío para el Novio", text: "Imita cómo reaccionaste cuando conociste a los papás de tu novia", rule: "Si Diego no lo hace bien, todos toman"},
+            
+            {category: "Completa la frase", text: "\"En Las Estacas siempre pasaba que...\"", rule: "El que se equivoque o no sepa, toma"},
+            {category: "Completa la frase", text: "\"Diego Sanchez se pone grumpy cuando...\"", rule: "El que se equivoque o no sepa, toma"},
+            {category: "Completa la frase", text: "\"La primera vez que vimos a la novia de Sanchez pensamos...\"", rule: "El que se equivoque o no sepa, toma"},
+            {category: "Completa la frase", text: "\"El mayor defecto de Vesga es ser...\"", rule: "El que se equivoque o no sepa, toma"},
+            {category: "Completa la frase", text: "\"Javier parece tío porque...\"", rule: "El que se equivoque o no sepa, toma"},
+            {category: "Completa la frase", text: "\"Lo mejor de nuestros días de FIFA era...\"", rule: "El que se equivoque o no sepa, toma"},
+            {category: "Completa la frase", text: "\"Diego Sanchez nunca va a dejar de...\"", rule: "El que se equivoque o no sepa, toma"},
+            
+            {category: "Verdadero o Falso", text: "Diego Sanchez propuso matrimonio en Las Estacas", rule: "El que se equivoque, toma"},
+            {category: "Verdadero o Falso", text: "Vesga ganó la apuesta sobre el matrimonio de Sanchez", rule: "El que se equivoque, toma"},
+            {category: "Verdadero o Falso", text: "La novia de Sanchez estudió la misma carrera que él", rule: "El que se equivoque, toma"},
+            {category: "Verdadero o Falso", text: "Javier es el mayor del grupo", rule: "El que se equivoque, toma"},
+            {category: "Verdadero o Falso", text: "Todos en el grupo han estado en Las Estacas al menos una vez", rule: "El que se equivoque, toma"},
+            
+            {category: "Reto Grupal", text: "Cada uno debe decir un consejo matrimonial para Sanchez (en orden de edad)", rule: "Si no se cumple, todos toman"},
+            {category: "Reto Grupal", text: "Todos deben imitar la reacción de Sanchez viendo una película que no le gusta", rule: "Si no se cumple, todos toman"},
+            {category: "Reto Grupal", text: "Crear entre todos un rap sobre la boda de Sanchez (cada uno una línea)", rule: "Si no se cumple, todos toman"},
+            {category: "Reto Grupal", text: "Cada uno debe adivinar qué regalo llevará el otro a la boda", rule: "Si no se cumple, todos toman"},
+            {category: "Reto Grupal", text: "Todos deben actuar como si fueran personajes de El Señor de los Anillos por 2 minutos", rule: "Si no se cumple, todos toman"},
+            
+            {category: "Pregunta Directa", text: "Diego Aceves: ¿Cuál fue tu primera impresión de la novia de Sanchez?", rule: "Si no responde o miente, toma"},
+            {category: "Pregunta Directa", text: "Eduardo Vesga: ¿Cuándo supiste que Sanchez se iba a casar de verdad?", rule: "Si no responde o miente, toma"},
+            {category: "Pregunta Directa", text: "Javier: ¿Qué consejo le darías a Sanchez para el matrimonio?", rule: "Si no responde o miente, toma"},
+            {category: "Pregunta Directa", text: "Diego Prado: ¿Cuál crees que será el primer problema matrimonial de Sanchez?", rule: "Si no responde o miente, toma"},
+            {category: "Pregunta Directa", text: "Rodrigo: ¿Qué es lo que más vas a extrañar de Sanchez soltero?", rule: "Si no responde o miente, toma"}
+        ];
+
+        let currentCardIndex = 0;
+        let shuffledCards = [...cards];
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Initialize the game
+        function initGame() {
+            shuffledCards = shuffleArray([...cards]);
+            currentCardIndex = 0;
+            displayCard();
+            document.getElementById('totalCards').textContent = shuffledCards.length;
+        }
+
+        // Display current card
+        function displayCard() {
+            if (currentCardIndex < shuffledCards.length) {
+                const card = shuffledCards[currentCardIndex];
+                document.getElementById('cardCategory').textContent = card.category;
+                document.getElementById('cardText').textContent = card.text;
+                document.getElementById('cardNumber').textContent = currentCardIndex + 1;
+            } else {
+                document.getElementById('cardCategory').textContent = "¡Fin del juego!";
+                document.getElementById('cardText').textContent = "¡Han completado todas las cartas! 🎉";
+                document.getElementById('cardNumber').textContent = shuffledCards.length;
+            }
+        }
+
+        // Next card function
+        function nextCard() {
+            if (currentCardIndex < shuffledCards.length - 1) {
+                currentCardIndex++;
+            } else {
+                currentCardIndex = 0; // Loop back to start
+            }
+            displayCard();
+        }
+
+        // Shuffle all cards
+        function shuffleCards() {
+            shuffledCards = shuffleArray([...cards]);
+            currentCardIndex = 0;
+            displayCard();
+        }
+
+        // Toggle rules visibility
+        function toggleRules() {
+            const rules = document.getElementById('rules');
+            const toggle = document.querySelector('.rules-toggle');
+            if (rules.style.display === 'none' || rules.style.display === '') {
+                rules.style.display = 'block';
+                toggle.textContent = 'Ocultar reglas';
+            } else {
+                rules.style.display = 'none';
+                toggle.textContent = 'Ver reglas del juego';
+            }
+        }
+
+        // Initialize game when page loads
+        window.onload = initGame;
+    </script>
+</body>
+</html>
