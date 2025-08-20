@@ -368,7 +368,10 @@
                     category: selectedCharacter.category
                 });
             }
-            gameRoles.push({ type: 'impostor' });
+            gameRoles.push({ 
+    type: 'impostor', 
+    category: selectedCharacter.category 
+});
             
             // Mezclar roles
             gameRoles = shuffleArray(gameRoles);
