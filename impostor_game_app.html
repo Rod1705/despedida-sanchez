@@ -424,7 +424,7 @@
                 roleCard.className = 'role-card impostor';
                 roleCard.querySelector('.role-title').textContent = '🕵️ IMPOSTOR';
                 roleCard.querySelector('.role-name').textContent = 'Eres el impostor';
-                roleCard.querySelector('.role-category').textContent = 'Descubre el personaje del grupo sin ser descubierto';
+                roleCard.querySelector('.role-category').textContent = `Categoría del grupo: ${currentRole.category}\\nDescubre quién es sin ser descubierto`;
             } else {
                 roleCard.className = 'role-card character';
                 roleCard.querySelector('.role-title').textContent = '👤 TU PERSONAJE';
